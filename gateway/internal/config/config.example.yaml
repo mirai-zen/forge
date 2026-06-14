@@ -1,0 +1,20 @@
+# gateway-service 配置模板
+# 复制为 config.yaml 并修改实际值
+
+Name: gateway-service
+Host: 0.0.0.0
+Port: 8880
+
+Etcd:
+  Hosts:
+    - kind-control-plane:2379
+  Key: gateway-service.rpc
+
+MySQL:
+  DataSource: root:password@tcp(mysql:3306)/forge_gateway?charset=utf8mb4&parseTime=True
+
+Redis:
+  Host: redis:6379
+  Password: ""
+  DB: 0
+

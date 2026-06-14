@@ -1,0 +1,79 @@
+name: User Service CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'user/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'user/**'
+
+env:
+  SERVICE: user
+  IMAGE: ghcr.io/mirai-zen/forge-user
+  REPO: forge
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: user
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Lint
+        run: |
+          go vet ./...
+
+      - name: Test
+        run: |
+          go test -race -coverprofile=coverage.out ./...
+
+      - name: Build
+        run: |
+          CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/user ./cmd/
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/mirai-zen/forge-user
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=raw,value=latest
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./user
+          file: ./user/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

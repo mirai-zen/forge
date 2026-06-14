@@ -1,0 +1,79 @@
+name: Platform Service CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'platform/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'platform/**'
+
+env:
+  SERVICE: platform
+  IMAGE: ghcr.io/mirai-zen/forge-platform
+  REPO: forge
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: platform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+
+      - name: Lint
+        run: |
+          go vet ./...
+
+      - name: Test
+        run: |
+          go test -race -coverprofile=coverage.out ./...
+
+      - name: Build
+        run: |
+          CGO_ENABLED=0 go build -ldflags="-s -w" -o bin/platform ./cmd/
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/mirai-zen/forge-platform
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=raw,value=latest
+
+      - name: Build and Push
+        uses: docker/build-push-action@v5
+        with:
+          context: ./platform
+          file: ./platform/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
