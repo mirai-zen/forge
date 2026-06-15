@@ -1,0 +1,10 @@
+Name: platform
+Host: 0.0.0.0
+Port: 8888
+
+MySQL:
+  DataSource: root:root123@tcp(127.0.0.1:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
+
+GitHub:
+  Token: ""
+  Org: mirai-zen
