@@ -6,5 +6,5 @@ MySQL:
   DataSource: root:123456@tcp(mirai-wsl.tail6ddf30.ts.net:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
 
 GitHub:
-  Token: "***REMOVED***"
+  Token: ""
   Org: mirai-zen
