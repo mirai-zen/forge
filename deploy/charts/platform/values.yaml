@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: ghcr.io/mirai-zen/forge-platform
-  tag: c53b390
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:
