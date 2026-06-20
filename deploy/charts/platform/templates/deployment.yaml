@@ -26,6 +26,10 @@ spec:
             - name: MYSQL_DSN
               value: "{{ .Values.env.MYSQL_DSN }}"
             - name: GITHUB_TOKEN
-              value: "{{ .Values.env.GITHUB_TOKEN }}"
+              valueFrom:
+                secretKeyRef:
+                  name: forge-secrets
+                  key: github-token
+                  optional: true
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
