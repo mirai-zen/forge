@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"os"
@@ -10,6 +11,7 @@ import (
 	"github.com/mirai-zen/forge/platform/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
+	"gopkg.in/yaml.v3"
 )
 
 var configFile = flag.String("f", "", "config file path (default: /app/configs/platform.yaml in K8s, configs/dev.yaml locally)")
@@ -32,7 +34,18 @@ func main() {
 	var c config.Config
 	if _, err := os.Stat(configPath); err == nil {
 		conf.MustLoad(configPath, &c)
-		fmt.Fprintf(os.Stderr, "[config] loaded %s, DSN=%s\n", configPath, c.MySQL.DataSource)
+		j, _ := json.MarshalIndent(c, "", "  ")
+		fmt.Fprintf(os.Stderr, "[config] go-zero loaded %s:\n%s\n", configPath, string(j))
+
+		// 用标准 yaml 库再解析一次作对比
+		raw, _ := os.ReadFile(configPath)
+		var c2 config.Config
+		if err := yaml.Unmarshal(raw, &c2); err != nil {
+			fmt.Fprintf(os.Stderr, "[config] yaml.Unmarshal error: %v\n", err)
+		} else {
+			j2, _ := json.MarshalIndent(c2, "", "  ")
+			fmt.Fprintf(os.Stderr, "[config] yaml.v3 loaded:\n%s\n", string(j2))
+		}
 	} else {
 		// 容器环境无文件：从环境变量构建
 		fmt.Fprintf(os.Stderr, "[config] %s not found: %v, using env\n", configPath, err)
