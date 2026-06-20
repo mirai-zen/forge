@@ -4,6 +4,7 @@
 Name: platform-service
 Host: 0.0.0.0
 Port: 8880
+Timeout: 30000
 
 Etcd:
   Hosts:

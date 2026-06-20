@@ -60,9 +60,9 @@ func (h *CreateProjectHandler) createGitHubRepo(req *platform.CreateProjectReq) 
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	org := req.GitOrg
-	if org == "" {
-		org = h.ctx.Config.GitHub.Org
+	owner := req.GitOrg
+	if owner == "" {
+		owner = h.ctx.Config.GitHub.Org
 	}
 
 	repo := &github.Repository{
@@ -72,7 +72,12 @@ func (h *CreateProjectHandler) createGitHubRepo(req *platform.CreateProjectReq) 
 		AutoInit:    github.Bool(true),
 	}
 
-	created, _, err := client.Repositories.Create(ctx, org, repo)
+	// 先尝试作为 Organization 创建，失败则作为个人账号创建
+	created, _, err := client.Repositories.Create(ctx, owner, repo)
+	if err != nil {
+		// 404 说明 owner 不是 Organization，尝试作为个人用户创建
+		created, _, err = client.Repositories.Create(ctx, "", repo)
+	}
 	if err != nil {
 		return "", fmt.Errorf("create repo: %w", err)
 	}

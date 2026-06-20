@@ -20,20 +20,16 @@ type ListProjectsHandler struct {
 }
 
 func (h *ListProjectsHandler) Handle(w http.ResponseWriter, r *http.Request) {
-	var req platform.ListProjectsReq
-	if err := httpx.Parse(r, &req); err != nil {
-		httpx.Error(w, err)
-		return
-	}
-
-	page := int(req.Page)
+	// 手动解析 query 参数，避免 httpx.Parse 要求必填字段
+	page, _ := strconv.Atoi(r.URL.Query().Get("page"))
 	if page < 1 {
 		page = 1
 	}
-	pageSize := int(req.PageSize)
+	pageSize, _ := strconv.Atoi(r.URL.Query().Get("page_size"))
 	if pageSize < 1 || pageSize > 100 {
 		pageSize = 20
 	}
+	keyword := r.URL.Query().Get("keyword")
 
 	type ProjectRow struct {
 		ID           uint   `gorm:"column:id"`
@@ -51,8 +47,8 @@ func (h *ListProjectsHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		Joins("LEFT JOIN services ON services.project_id = projects.id").
 		Group("projects.id")
 
-	if req.Keyword != "" {
-		query = query.Where("projects.name LIKE ?", "%"+req.Keyword+"%")
+	if keyword != "" {
+		query = query.Where("projects.name LIKE ?", "%"+keyword+"%")
 	}
 
 	var total int64
