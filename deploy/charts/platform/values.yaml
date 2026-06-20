@@ -2,7 +2,10 @@
 image:
   repository: ghcr.io/mirai-zen/forge-platform
   tag: latest
-  pullPolicy: IfNotPresent
+  #pullPolicy: IfNotPresent
+  # 总是拉取最新的镜像
+  pullPolicy: Always
+
 
 # Service
 service:
@@ -19,17 +22,3 @@ resources:
     memory: 256Mi
 
 # 业务启动配置（所有环境公共默认值，环境特定值在 values-{env}.yaml 覆盖）
-config:
-  name: platform
-  host: 0.0.0.0
-  port: 8880
-  timeout: 30000
-  mysql:
-    datasource: ""
-  github:
-    token: ""          # 实际值通过 K8s Secret 注入，不写明文
-    org: mirai-zen
-
-# 敏感字段（开发环境用明文注入 Secret，生产用 SealedSecret）
-secret:
-  githubToken: ""

@@ -1,5 +1,9 @@
 # forge-dev 环境（K8s Kind 集群）
 config:
+  name: platform
+  host: 0.0.0.0
+  port: 8880
+  timeout: 30000
   mysql:
     datasource: "root:123456@tcp(host.docker.internal:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local"
   github:
