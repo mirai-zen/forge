@@ -22,16 +22,20 @@ func main() {
 	if configPath == "" {
 		if _, err := os.Stat("/app/configs/platform.yaml"); err == nil {
 			configPath = "/app/configs/platform.yaml" // K8s ConfigMap 挂载
+			fmt.Printf("[config] found /app/configs/platform.yaml\n")
 		} else {
 			configPath = "configs/dev.yaml" // 本地开发
+			fmt.Printf("[config] /app/configs/platform.yaml not found: %v, fallback to %s\n", err, configPath)
 		}
 	}
 
 	var c config.Config
 	if _, err := os.Stat(configPath); err == nil {
 		conf.MustLoad(configPath, &c)
+		fmt.Printf("[config] loaded %s, DSN=%s\n", configPath, c.MySQL.DataSource)
 	} else {
 		// 容器环境无文件：从环境变量构建
+		fmt.Printf("[config] %s not found: %v, using env\n", configPath, err)
 		c = config.Config{
 			RestConf: rest.RestConf{
 				Host:    "0.0.0.0",
@@ -40,6 +44,7 @@ func main() {
 			},
 		}
 		c.MySQL.DataSource = getEnv("MYSQL_DSN", "")
+		fmt.Printf("[config] env DSN=%s\n", c.MySQL.DataSource)
 	}
 
 	// 敏感值始终优先从环境变量获取（K8s Secret 注入）
