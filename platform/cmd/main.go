@@ -27,6 +27,7 @@ func main() {
 	}
 
 	var c config.Config
+	fmt.Printf("Loading config from: %s\n", configPath)
 	conf.MustLoad(configPath, &c)
 
 	// 敏感值从 K8s Secret 注入的环境变量覆盖

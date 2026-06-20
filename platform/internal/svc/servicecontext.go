@@ -14,10 +14,9 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	fmt.Print("mysql connect source:", c.MySQL.DataSource)
 	db, err := gorm.Open(mysql.Open(c.MySQL.DataSource), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database: " + err.Error())
+		panic(fmt.Sprintf("failed to connect database (dsn=%q): %v", c.MySQL.DataSource, err))
 	}
 
 	return &ServiceContext{
