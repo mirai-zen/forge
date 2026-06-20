@@ -4,11 +4,10 @@ COPY go.mod go.sum ./
 RUN go mod download
 COPY . .
 RUN CGO_ENABLED=0 go build -ldflags="-s -w" -o /server ./cmd/
+# 在 builder 阶段创建 ConfigMap 挂载目录（distroless 不支持 RUN）
+RUN mkdir -p /app/configs
 
 FROM gcr.io/distroless/static:nonroot
 COPY --from=builder /server /server
-# 创建 ConfigMap 挂载点
-USER root
-RUN mkdir -p /app/configs && chown nonroot:nonroot /app/configs
-USER nonroot:nonroot
+COPY --from=builder --chown=nonroot:nonroot /app/configs /app/configs
 ENTRYPOINT ["/server"]
