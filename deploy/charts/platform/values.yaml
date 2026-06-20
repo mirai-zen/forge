@@ -18,5 +18,5 @@ resources:
     cpu: "500m"
 
 env:
-  MYSQL_DSN: root:123456@tcp(mysql:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
+  MYSQL_DSN: root:123456@tcp(host.docker.internal:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
   GITHUB_TOKEN: ""  # 通过 K8s Secret 注入
