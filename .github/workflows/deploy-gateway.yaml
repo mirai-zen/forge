@@ -55,8 +55,17 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Deploy Result
+      - name: Update Helm Chart
         run: |
-          echo "✅ Deployed gateway to ${{ inputs.env }} (${{ inputs.namespace }})"
-          echo "📦 Image: ${{ env.IMAGE }}:${{ steps.meta.outputs.version }}"
-          echo "🌿 Branch: ${{ inputs.branch }}"
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          CHART="deploy/charts/gateway/values.yaml"
+          sed -i "s/tag:.*/tag: ${SHORT_SHA}/" "$CHART"
+          echo "📦 Updated image tag to ${SHORT_SHA}"
+
+      - name: Commit & Push
+        run: |
+          git config user.name "forge-bot"
+          git config user.email "bot@forge.dev"
+          git add deploy/charts/gateway/values.yaml
+          git commit -m "🚀 deploy(gateway): update image to ${{ github.sha }}" || echo "No changes"
+          git push origin main
