@@ -1,0 +1,9 @@
+# forge-dev 环境（K8s Kind 集群）
+config:
+  mysql:
+    datasource: "root:123456@tcp(mysql:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local"
+  github:
+    org: mirai-zen
+
+secret:
+  githubToken: ""    # 通过 --set 或 CLI 传入，不提交

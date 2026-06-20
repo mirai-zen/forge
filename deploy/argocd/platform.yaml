@@ -12,9 +12,9 @@ spec:
     targetRevision: main
     path: deploy/charts/platform
     helm:
-      parameters:
-        - name: image.tag
-          value: latest
+      valueFiles:
+        - values.yaml
+        - values-dev.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: forge-dev

@@ -22,14 +22,24 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: {{ .Values.service.port }}
+          # 业务启动配置：ConfigMap 挂载 → 程序读取 /app/configs/platform.yaml
+          volumeMounts:
+            - name: config
+              mountPath: /app/configs
+              readOnly: true
+          # 敏感值：外部手动创建的 Secret
           env:
-            - name: MYSQL_DSN
-              value: "{{ .Values.env.MYSQL_DSN }}"
             - name: GITHUB_TOKEN
               valueFrom:
                 secretKeyRef:
                   name: forge-secrets
                   key: github-token
                   optional: true
+            - name: GITHUB_ORG
+              value: {{ .Values.config.github.org | quote }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Release.Name }}-config

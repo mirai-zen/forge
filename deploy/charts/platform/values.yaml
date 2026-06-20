@@ -1,22 +1,35 @@
-replicaCount: 1
-
+# 镜像配置
 image:
   repository: ghcr.io/mirai-zen/forge-platform
-  tag: aa6c395
+  tag: latest
   pullPolicy: IfNotPresent
 
+# Service
 service:
   type: ClusterIP
   port: 8880
 
+# 资源配额
 resources:
   requests:
-    memory: "64Mi"
-    cpu: "100m"
+    cpu: 100m
+    memory: 64Mi
   limits:
-    memory: "256Mi"
-    cpu: "500m"
+    cpu: 500m
+    memory: 256Mi
 
-env:
-  MYSQL_DSN: root:123456@tcp(host.docker.internal:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
-  GITHUB_TOKEN: ""  # 通过 K8s Secret 注入
+# 业务启动配置（所有环境公共默认值，环境特定值在 values-{env}.yaml 覆盖）
+config:
+  name: platform
+  host: 0.0.0.0
+  port: 8880
+  timeout: 30000
+  mysql:
+    datasource: ""
+  github:
+    token: ""          # 实际值通过 K8s Secret 注入，不写明文
+    org: mirai-zen
+
+# 敏感字段（开发环境用明文注入 Secret，生产用 SealedSecret）
+secret:
+  githubToken: ""
