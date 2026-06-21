@@ -6,7 +6,8 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
-CONFIG_FILE="$PROJECT_DIR/configs/platform.yaml"
+#CONFIG_FILE="$PROJECT_DIR/configs/platform.yaml"
+CONFIG_FILE="$PROJECT_DIR/configs/dev.yaml"
 
 echo "🔧 检查依赖..."
 
