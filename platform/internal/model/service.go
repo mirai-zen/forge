@@ -6,13 +6,15 @@ import (
 )
 
 type Service struct {
-	ID         uint            `gorm:"primaryKey;autoIncrement"`
-	ProjectID  uint            `gorm:"index;not null"`
-	Name       string          `gorm:"size:64;not null"`
-	Template   string          `gorm:"size:64;not null"`
-	ParamsJSON json.RawMessage `gorm:"type:json;not null"`
-	CreatedAt  time.Time       `gorm:"autoCreateTime"`
-	UpdatedAt  time.Time       `gorm:"autoUpdateTime"`
+	ID          uint            `gorm:"primaryKey;autoIncrement"`
+	ProjectID   uint            `gorm:"index;not null"`
+	Name        string          `gorm:"size:64;not null"`
+	Description string          `gorm:"size:256"`
+	Template    string          `gorm:"size:64;not null"`
+	ParamsJSON  json.RawMessage `gorm:"type:json;not null"`
+	Creator     string          `gorm:"size:64"`
+	CreatedAt   time.Time       `gorm:"autoCreateTime"`
+	UpdatedAt   time.Time       `gorm:"autoUpdateTime"`
 
 	Project *Project     `gorm:"foreignKey:ProjectID"`
 	Envs    []ServiceEnv `gorm:"foreignKey:ServiceID"`

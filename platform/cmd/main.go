@@ -7,6 +7,7 @@ import (
 
 	"github.com/mirai-zen/forge/platform/internal/config"
 	"github.com/mirai-zen/forge/platform/internal/handler"
+	"github.com/mirai-zen/forge/platform/internal/model"
 	"github.com/mirai-zen/forge/platform/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -42,6 +43,10 @@ func main() {
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)
+
+	// 自动迁移数据库 Schema
+	ctx.DB.AutoMigrate(&model.Service{}, &model.ServiceEnv{})
+
 	handler.RegisterRoutes(server, ctx)
 
 	fmt.Printf("Platform starting at %s:%d\n", c.Host, c.Port)

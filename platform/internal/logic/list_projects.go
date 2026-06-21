@@ -109,9 +109,11 @@ func (h *GetProjectHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var svcs []struct {
-		ID       uint   `gorm:"column:id"`
-		Name     string `gorm:"column:name"`
-		Template string `gorm:"column:template"`
+		ID          uint   `gorm:"column:id"`
+		Name        string `gorm:"column:name"`
+		Description string `gorm:"column:description"`
+		Template    string `gorm:"column:template"`
+		Creator     string `gorm:"column:creator"`
 	}
 
 	h.ctx.DB.Table("services").Where("project_id = ?", id).Scan(&svcs)
@@ -119,9 +121,11 @@ func (h *GetProjectHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	var services []*platform.ServiceBrief
 	for _, s := range svcs {
 		services = append(services, &platform.ServiceBrief{
-			Id:       uint64(s.ID),
-			Name:     s.Name,
-			Template: s.Template,
+			Id:          uint64(s.ID),
+			Name:        s.Name,
+			Description: s.Description,
+			Template:    s.Template,
+			Creator:     s.Creator,
 		})
 	}
 	if services == nil {

@@ -31,7 +31,7 @@ require (
 	github.com/klauspost/compress v1.18.6 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/mirai-zen/forge-proto/platform v0.0.0-20260615160401-01ed27a63388
+	github.com/mirai-zen/forge-proto/platform v0.0.0-20260621152341-eb7299551dcd
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/openzipkin/zipkin-go v0.4.3 // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect

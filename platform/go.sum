@@ -55,8 +55,8 @@ github.com/mattn/go-colorable v0.1.13/go.mod h1:7S9/ev0klgBDR4GtXTXX8a3vIGJpMovk
 github.com/mattn/go-isatty v0.0.16/go.mod h1:kYGgaQfpe5nmfYZH+SKPsOc2e4SrIfOl2e/yFXSvRLM=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=
 github.com/mattn/go-isatty v0.0.20/go.mod h1:W+V8PltTTMOvKvAeJH7IuucS94S2C6jfK/D7dTCTo3Y=
-github.com/mirai-zen/forge-proto/platform v0.0.0-20260615160401-01ed27a63388 h1:wGVAJcmyHWGfdzMtcj3yaqtCzlf+pp9H+IvZlVkPW/8=
-github.com/mirai-zen/forge-proto/platform v0.0.0-20260615160401-01ed27a63388/go.mod h1:0CFCj5x3KB1xmya9XBccD8m8fEZLc6XUvBenoIzzvjc=
+github.com/mirai-zen/forge-proto/platform v0.0.0-20260621152341-eb7299551dcd h1:uQZfY31yrhH2+NRSIgLJtla9rV/5ddIx6mEx3KuPqR4=
+github.com/mirai-zen/forge-proto/platform v0.0.0-20260621152341-eb7299551dcd/go.mod h1:0CFCj5x3KB1xmya9XBccD8m8fEZLc6XUvBenoIzzvjc=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 h1:C3w9PqII01/Oq1c1nUAm88MOHcQC9l5mIlSMApZMrHA=
 github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822/go.mod h1:+n7T8mK8HuQTcFwEeznm/DIxMOiR9yIdICNftLE1DvQ=
 github.com/openzipkin/zipkin-go v0.4.3 h1:9EGwpqkgnwdEIJ+Od7QVSEIH+ocmm5nPat0G7sjsSdg=

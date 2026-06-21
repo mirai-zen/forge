@@ -25,11 +25,13 @@ type CreateServiceHandler struct {
 	ctx *svc.ServiceContext
 }
 
-// createServiceBody 只解析 body 中的 name/template/params，project_id 从 URL 获取
+// createServiceBody 只解析 body 中的业务字段，project_id 从 URL 获取
 type createServiceBody struct {
-	Name     string `json:"name"`
-	Template string `json:"template"`
-	Params   string `json:"params"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	Template    string `json:"template"`
+	Params      string `json:"params"`
+	Creator     string `json:"creator"`
 }
 
 func (h *CreateServiceHandler) Handle(w http.ResponseWriter, r *http.Request) {
@@ -61,10 +63,12 @@ func (h *CreateServiceHandler) Handle(w http.ResponseWriter, r *http.Request) {
 
 	// 2. 写服务元数据到数据库
 	svc := &model.Service{
-		ProjectID:  uint(projectID),
-		Name:       body.Name,
-		Template:   body.Template,
-		ParamsJSON: []byte(body.Params),
+		ProjectID:   uint(projectID),
+		Name:        body.Name,
+		Description: body.Description,
+		Template:    body.Template,
+		ParamsJSON:  []byte(body.Params),
+		Creator:     body.Creator,
 	}
 	if err := h.ctx.DB.Create(svc).Error; err != nil {
 		httpx.ErrorCtx(r.Context(), w, fmt.Errorf("create service: %w", err))
