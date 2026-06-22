@@ -10,6 +10,7 @@ import (
 	"github.com/mirai-zen/forge/platform/internal/model"
 	"github.com/mirai-zen/forge/platform/internal/svc"
 	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/trace"
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -37,6 +38,15 @@ func main() {
 	}
 	if o := os.Getenv("GITHUB_ORG"); o != "" {
 		c.GitHub.Org = o
+	}
+
+	// ────────── 可观测性初始化 ──────────
+
+	// OpenTelemetry 链路追踪
+	if c.Telemetry.Endpoint != "" {
+		trace.StartAgent(c.Telemetry)
+		defer trace.StopAgent()
+		fmt.Printf("Trace agent: %s -> %s\n", c.Telemetry.Name, c.Telemetry.Endpoint)
 	}
 
 	server := rest.MustNewServer(c.RestConf)
