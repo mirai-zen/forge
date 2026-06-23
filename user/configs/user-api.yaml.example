@@ -1,0 +1,15 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8881
+
+MySQL:
+  DataSource: root:yourpassword@tcp(127.0.0.1:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
+
+JWT:
+  Secret: change-me-in-production
+  Expire: 86400
+
+Log:
+  ServiceName: user-service
+  Mode: console
+  Level: info

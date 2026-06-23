@@ -1,0 +1,54 @@
+syntax = "v1"
+
+info (
+	title:   "User Service"
+	desc:    "用户认证服务"
+	author:  "forge"
+	version: "v0.1.0"
+)
+
+type (
+	RegisterReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+		Email    string `json:"email,optional"`
+	}
+	RegisterResp {
+		Id      int64  `json:"id"`
+		Message string `json:"message"`
+	}
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+	LoginResp {
+		Token     string `json:"token"`
+		UserId    int64  `json:"user_id"`
+		Username  string `json:"username"`
+		ExpiresAt int64  `json:"expires_at"`
+	}
+	VerifyTokenReq {
+		Token string `json:"token"`
+	}
+	VerifyTokenResp {
+		Valid    bool   `json:"valid"`
+		UserId   int64  `json:"user_id"`
+		Username string `json:"username"`
+	}
+)
+
+@server (
+	prefix: /api/user
+	group:  user
+)
+service user-api {
+	@handler Register
+	post /register (RegisterReq) returns (RegisterResp)
+
+	@handler Login
+	post /login (LoginReq) returns (LoginResp)
+
+	@handler VerifyToken
+	post /verify (VerifyTokenReq) returns (VerifyTokenResp)
+}
+

@@ -1,0 +1,7 @@
+Name: gateway
+Host: 0.0.0.0
+Port: 8880
+
+Upstream:
+  Platform: http://127.0.0.1:8882
+  User: http://127.0.0.1:8881

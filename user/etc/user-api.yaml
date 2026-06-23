@@ -1,0 +1,15 @@
+Name: user-api
+Host: 0.0.0.0
+Port: 8081
+
+MySQL:
+  DataSource: root:123456@tcp(host.docker.internal:3306)/forge_platform?charset=utf8mb4&parseTime=True&loc=Local
+
+JWT:
+  Secret: forge-jwt-secret-change-in-production
+  Expire: 86400
+
+Log:
+  ServiceName: user-service
+  Mode: console
+  Level: info
